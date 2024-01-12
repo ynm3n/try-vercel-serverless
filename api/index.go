@@ -13,7 +13,7 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	dsn := os.Getenv("POSTGRES_URL")
+	dsn := os.Getenv("POSTGRES_URL_NON_POOLING")
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		panic(err)
