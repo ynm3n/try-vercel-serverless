@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -20,4 +21,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if err := db.PingContext(ctx); err != nil {
 		panic(err)
 	}
+	fmt.Fprintln(w, "connection and ping is ok")
 }
