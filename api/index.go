@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
+	"io"
 	"net/http"
 	"os"
+	"time"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -14,18 +15,15 @@ import (
 func Handler(w http.ResponseWriter, r *http.Request) {
 	dsn := os.Getenv("POSTGRES_URL")
 	db, err := sql.Open("pgx", dsn)
-	log.Println(err)
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
 	ctx := context.Background()
-	err = db.PingContext(ctx)
-	log.Println(err)
-	if err != nil {
+	if err = db.PingContext(ctx); err != nil {
 		panic(err)
 	}
 
-	fmt.Fprintln(w, "connection and ping is ok")
+	fmt.Fprintln(io.MultiWriter(w, os.Stdout), "connection and ping is ok", time.Now())
 }
